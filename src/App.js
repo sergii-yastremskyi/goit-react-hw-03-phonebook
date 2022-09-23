@@ -45,12 +45,26 @@ class App extends Component {
         contacts: [...prev.contacts, newContact],
       };
     });
-
-    // this.setState(prev => {{ const id = nanoid(); }
-    //   return{
-    //   contacts: [...prev.contacts, { id: 55, name, number }],
-    // };
   };
+  
+  componentDidMount() {
+    const { contacts } = this.state;
+    const localContacts = JSON.parse(localStorage.getItem('contacts'))
+    if (localContacts) {
+       this.setState ({
+         contacts: localContacts,
+       })
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) { 
+    if (this.state.contacts !== prevState.contacts) { 
+     localStorage.setItem('contacts',JSON.stringify(this.state.contacts))
+    
+    }
+  }
+  
+
 
   changeFilter = evt => {
     this.setState({ filter: evt.currentTarget.value });
