@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { nanoid } from 'nanoid';
 import styles from './components/shared/shared.module.css';
 import './App.css';
@@ -29,22 +30,27 @@ class App extends Component {
   formSubmitHandler = data => {
     const { name, number } = data;
 
-    this.state.contacts.map(contact => {
-      if (contact.name === name) {
-        alert(`${name} already in contacts`);
-      }
-    });
 
-    this.setState(prev => {
+    const isExist = this.state.contacts.some(contact => {
+      return contact.name === name
+    })
+
+    if (!isExist) { 
+       this.setState(prev => {
       const newContact = {
         id: nanoid(),
         ...data,
-      };
+      }
 
       return {
         contacts: [...prev.contacts, newContact],
       };
     });
+    } else {alert(`${name} already in contacts`);
+    }
+
+
+   
   };
   
   componentDidMount() {
@@ -55,6 +61,7 @@ class App extends Component {
          contacts: localContacts,
        })
     }
+    document.title='goit-react-wh-03-phonebook'
   }
 
   componentDidUpdate(prevProps, prevState) { 
@@ -90,6 +97,7 @@ class App extends Component {
   render() {
     const { contacts, filter } = this.state;
     const visibleContacts = this.getVisibleContacts();
+    
     return (
       <>
         <div className={(styles.container, styles.border)}>
